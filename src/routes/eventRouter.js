@@ -9,6 +9,10 @@ router.get('/',
     eventController.listEvents
 );
 
+router.get('/validEvents',
+    eventController.listValidEvents
+)
+
 router.post('/',
     validateBodyEvent,
     eventController.insertEvent
