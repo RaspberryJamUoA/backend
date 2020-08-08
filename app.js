@@ -10,6 +10,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+//Database
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://admin:admin123!@cluster0.74swx.azure.mongodb.net/dev?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
+
+
 // Routing
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
