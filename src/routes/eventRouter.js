@@ -6,11 +6,11 @@ const router = Router();
 
 // List events
 router.get('/',
-    validateBodyEvent,
     eventController.listEvents
 );
 
 router.post('/',
+    validateBodyEvent,
     eventController.insertEvent
 );
 

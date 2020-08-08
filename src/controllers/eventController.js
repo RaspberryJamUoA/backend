@@ -13,10 +13,10 @@ const listEvents = async (_, res) => {
     }
 }
 
-const insertEvent = async (req, res, next) => {
+const insertEvent = async (req, res) => {
     try {
         await eventCollection().insertOne(req.body);
-        return res.status(OK);
+        return res.status(OK).send();
     } catch (e) {
         res.status(INTERNAL_SERVER_ERROR).send(e.toString());
     }
