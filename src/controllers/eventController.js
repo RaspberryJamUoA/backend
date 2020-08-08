@@ -5,7 +5,7 @@ const eventCollection = () => client.db("dev").collection('events');
 
 const listEvents = async (_, res) => {
     try {
-        const events = await eventCollection().findOne({});
+        const events = await eventCollection().find({}).toArray();
         // Send stuff here.
         res.json(events);
     } catch (e) {
