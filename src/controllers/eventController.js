@@ -13,6 +13,17 @@ const listEvents = async (_, res) => {
     }
 }
 
+const listValidEvents = async(req, res, next) => {
+    try {
+        const validEvents = await eventCollection().find({
+            "dateTime" : {"$gte": ISODate(new Date().toISOString)}
+        })
+        res.json(validEvents);
+    } catch (e) {
+        res.status(500).json(e.toString());
+    }
+}
+
 const insertEvent = async (req, res) => {
     try {
         await eventCollection().insertOne(req.body);
