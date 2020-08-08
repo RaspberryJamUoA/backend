@@ -2,17 +2,6 @@ const client = require('../db/mongoClient');
 
 const eventCollection = () => client.db("dev").collection('events');
 
-const eventTemplate = {
-    eventName: "WDCC x AUCS Hack Weekend",
-    description: "Learn it, code it, win it",
-    dateTime: "9th August, 2020",
-    clubName: "WDCC",
-    cost: "",
-    location: "Grid AKL, New Zealand",
-    membershipRequired: true,
-    keywords: ["Code", "React", "JavaScript"]
-};
-
 const listEvents = async (_, res) => {
     try {
         const events = await eventCollection().find({}).toArray();
@@ -25,6 +14,8 @@ const listEvents = async (_, res) => {
 }
 
 const insertEvent = async (req, res) => {
+    const data = req.body;
+
     await eventCollection().insertOne(eventTemplate);
 
     return res.status(200);
