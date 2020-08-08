@@ -1,13 +1,13 @@
 const {Router} = require('express');
 const eventController = require('../controllers/eventController')
-const {eventValidator} = require('../controllers/eventValidator');
+const validateBodyEvent = require('../controllers/eventValidator').validateBodyEvent;
 
 const router = Router();
 
 // List events
 router.get('/',
-    eventValidator.validateBodyEvents,
-    eventController.listEvent
+    validateBodyEvent,
+    eventController.listEvents
 );
 
 router.post('/',

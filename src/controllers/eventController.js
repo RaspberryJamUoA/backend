@@ -1,24 +1,25 @@
+const { OK, INTERNAL_SERVER_ERROR } = require("http-status-codes");
 const client = require('../db/mongoClient');
 
 const eventCollection = () => client.db("dev").collection('events');
 
 const listEvents = async (_, res) => {
     try {
-        const events = await eventCollection().find({}).toArray();
+        const events = await eventCollection().findOne({});
         // Send stuff here.
-        return res.json(events);
+        res.json(events);
     } catch (e) {
-        return res.status(400).json(e.toString());
+        res.status(500).json(e.toString());
     }
-
 }
 
-const insertEvent = async (req, res) => {
-    const data = req.body;
-
-    await eventCollection().insertOne(eventTemplate);
-
-    return res.status(200);
+const insertEvent = async (req, res, next) => {
+    try {
+        await eventCollection().insertOne(req.body);
+        return res.status(OK);
+    } catch (e) {
+        res.status(INTERNAL_SERVER_ERROR).send(e.toString());
+    }
 }
 
 module.exports = {
