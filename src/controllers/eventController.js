@@ -15,7 +15,7 @@ const eventTemplate = {
 
 const listEvents = async (_, res) => {
     try {
-        const events = await eventCollection().findOne({});
+        const events = await eventCollection().find({}).toArray();
         // Send stuff here.
         return res.json(events);
     } catch (e) {
