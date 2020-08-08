@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+const {Router} = require('express');
+
+const router = Router();
 
 // Homepage - GET /
 router.get('/', function(req, res, next) {

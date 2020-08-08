@@ -10,7 +10,7 @@ client.connect(err => {
     } else {
         console.log("Connected")
     }
-});
+})
 
 
 module.exports = client;

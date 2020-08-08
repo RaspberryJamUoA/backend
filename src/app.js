@@ -1,11 +1,9 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var app = express();
-var mainRouter = require('./mainRouter');
-
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const app = express();
+const mainRouter = require('./mainRouter');
+const {NOT_FOUND} = require('http-status-codes');
 require("./db/mongoClient");
 
 app.use(logger('dev'));
@@ -16,18 +14,20 @@ app.use(cookieParser());
 // Routing
 app.use('/', mainRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) { next(createError(404)); });
-
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res, _) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.send('error 500');
+  res.send('error 500', err.toString());
+});
+
+// catch 404 and forward to error handler
+app.use((req, res) => {
+  res.status(NOT_FOUND).send('NOT FOUND');
 });
 
 module.exports = app;

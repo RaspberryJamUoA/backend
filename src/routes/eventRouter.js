@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var client = require("../db/mongoClient");
+const {Router} = require('express');
 const eventController = require('../controllers/eventController')
+
+const router = Router();
 
 // List events
 router.get('/', eventController.listEvents);

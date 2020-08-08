@@ -1,8 +1,8 @@
+const client = require('../db/mongoClient');
 
+const eventCollection = () => client.db("dev").collection('events');
 
-export const eventCollection = client.db("dev").collection('events');
-
-eventTemplate = {
+const eventTemplate = {
     eventName: "WDCC x AUCS Hack Weekend",
     description: "Learn it, code it, win it",
     dateTime: "9th August, 2020",
@@ -14,24 +14,20 @@ eventTemplate = {
 };
 
 const listEvents = async (_, res) => {
-
     try {
-        const events = await eventCollection.findOne({});
+        const events = await eventCollection().findOne({});
         // Send stuff here.
-        res.json(events);
+        return res.json(events);
     } catch (e) {
-        res.status(500).json(e.toString());
+        return res.status(400).json(e.toString());
     }
 
 }
 
-const insertEvent = async (req, res, next) => {
+const insertEvent = async (req, res) => {
+    await eventCollection().insertOne(eventTemplate);
 
-   await eventCollection.insertOne(eventTemplate);
-
-    res.json(
-        events
-    );
+    return res.status(200);
 }
 
 module.exports = {
