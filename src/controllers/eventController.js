@@ -1,5 +1,6 @@
 const {OK, INTERNAL_SERVER_ERROR} = require("http-status-codes");
 const client = require('../db/mongoClient');
+const {ObjectID} = require('mongodb');
 
 const eventCollection = () => client.db("dev").collection('events');
 
@@ -10,6 +11,20 @@ const listEvents = async (_, res) => {
         res.json(events);
     } catch (e) {
         res.status(500).json(e.toString());
+    }
+}
+
+const getEvent = async (req, res) => {
+
+    const {id} = req.params;
+
+    console.log(req.params, id);
+
+    try {
+        const c = await eventCollection();
+        res.status(OK).json(await c.findOne({_id: ObjectID(id)}))
+    } catch (e) {
+        res.status(NOT_FOUND).send(e.toString());
     }
 }
 
@@ -61,6 +76,7 @@ const insertEvent = async (req, res) => {
 }
 
 module.exports = {
+    getEvent,
     listEvents,
     insertEvent,
     listValidEvents,
