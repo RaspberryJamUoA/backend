@@ -13,6 +13,9 @@ router.get('/validEvents',
     eventController.listValidEvents
 )
 
+router.post("/queryEvents",
+    eventController.queryEvents    
+)
 router.post('/',
     validateBodyEvent,
     eventController.insertEvent
