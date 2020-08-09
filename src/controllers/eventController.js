@@ -1,4 +1,4 @@
-const { OK, INTERNAL_SERVER_ERROR } = require("http-status-codes");
+const {OK, INTERNAL_SERVER_ERROR} = require("http-status-codes");
 const client = require('../db/mongoClient');
 
 const eventCollection = () => client.db("dev").collection('events');
@@ -13,10 +13,10 @@ const listEvents = async (_, res) => {
     }
 }
 
-const listValidEvents = async(req, res, next) => {
+const listValidEvents = async (req, res, next) => {
     try {
         const validEvents = await eventCollection().find({
-              "dateTime" : {"$gt": new Date().toISOString()}
+            "dateTime": {"$gt": new Date().toISOString()}
         }).toArray();
 
         res.json(validEvents);
@@ -25,23 +25,25 @@ const listValidEvents = async(req, res, next) => {
     }
 }
 
-const queryEvents = async(req, res, next) => {
+const queryEvents = async (req, res) => {
     let query = req.body;
 
     const defaultQuery = {
-        minCost: 0,
-        maxCost: Number.MAX_SAFE_INTEGER
+        minCost: 0
     }
 
     query = {...defaultQuery, ...query};
 
-    const regexSearch = RegExp(query.clubName);
-    console.log(regexSearch.toString());
+    let costQ = {
+        $gte: query.minCost
+    }
+    if (query.maxCost !== undefined) {
+        costQ['$lte'] = Number(query.maxCost);
+    }
+
     try {
         const validEvents = await eventCollection().find({
-              "dateTime" : {"$gt": new Date().toISOString()},
-              "clubName" : {$regex: regexSearch},
-              "cost" : {$gte : query.minCost, $lte :query.maxCost}
+            "cost": costQ
         }).toArray();
         res.json(validEvents);
     } catch (e) {
